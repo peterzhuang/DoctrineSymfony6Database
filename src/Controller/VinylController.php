@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\VinylMix;
+use App\Repository\VinylMixRepository;
 use App\Service\MixRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,11 +38,14 @@ class VinylController extends AbstractController
     }
 
     #[Route('/browse/{slug}', name: 'app_browse')]
-    public function browse(string $slug = null): Response
+    public function browse(VinylMixRepository $mixRepository, string $slug = null): Response
     {
         $genre = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
 
-        $mixes = $this->mixRepository->findAll();
+        // $mixes = $this->mixRepository->findAll();
+        // $mixRepository = $entityManager->getRepository(VinylMix::class);
+        // dd($mixRepository);
+        $mixes = $mixRepository->findAll();
 
         return $this->render('vinyl/browse.html.twig', [
             'genre' => $genre,
